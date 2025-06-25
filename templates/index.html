@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CuentaCuentos Los Mirlos — Crea cuentos mágicos con IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Merriweather&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .fade-bottom {
+      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    }
+    .book-text {
+      font-family: 'Merriweather', serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      background-color: #fefcf9;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 border-b shadow-sm">
+    <div class="text-2xl font-extrabold text-gray-900">📚 CuentaCuentos Los Mirlos — Crea cuentos mágicos con IA</div>
+    <nav class="space-x-6 hidden sm:flex">
+      <a href="https://github.com/luigicabrera10/Storytelling-gcp" target="_blank" class="text-gray-600 hover:text-gray-900 font-medium transition">GitHub</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="flex flex-col-reverse md:flex-row items-center justify-between px-6 pt-10 pb-20 max-w-7xl mx-auto relative overflow-hidden fade-bottom h-[75vh]">
+    <div class="md:w-1/2">
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+        Crea cuentos dinámicos con Inteligencia Artificial<br />
+        <span class="text-orange-500">¡en segundos!</span>
+      </h1>
+      <p class="mt-4 text-lg text-gray-600">
+        Plataforma impulsada por modelos LLM en Google Cloud. Genera cuentos únicos, habla con personajes y recibe un final automático en solo 5 decisiones.
+      </p>
+    </div>
+    <div class="relative w-[200px] md:w-[310px]">
+      <img src="{{ url_for('static', filename='figs/image.png') }}" class="rounded-xl w-full" alt="Imagen de IA generando cuentos" />
+      <div class="absolute bottom-0 left-0 w-full h-1/3 rounded-b-xl bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+    </div>
+  </section>
+
+  <!-- Generador -->
+  <section id="generador" class="bg-gray-50 pt-10 pb-20 px-6 -mt-20">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 bg-white p-8 rounded-2xl shadow-xl">
+
+      <!-- Columna 1: Historia (más ancha) -->
+      <div class="md:col-span-7">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">📝 Genera tu cuento</h2>
+        <div class="bg-gray-100 p-4 rounded-xl shadow-inner">
+          <textarea id="prompt" rows="5" placeholder="Escribe tu idea mágica..."
+            class="w-full border border-gray-300 rounded-lg p-4 mb-4 resize-none text-md focus:ring-2 focus:ring-orange-400 outline-none"></textarea>
+          <button id="generate"
+            class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg shadow transition">
+            ✨ ¡Generar historia!
+          </button>
+        </div>
+        <div id="storySection" class="hidden mt-6">
+          <h3 id="title" class="text-xl font-semibold text-gray-800 mb-1"></h3>
+          <p id="characters" class="text-gray-600 italic mb-3"></p>
+          <div id="story" class="book-text whitespace-pre-wrap text-gray-800 mb-6"></div>
+          <div id="options" class="divide-y divide-gray-200">
+            <!-- Las opciones se generan dinámicamente con JS -->
+            <!-- Ejemplo: -->
+            <!--
+            <div class="bg-white p-4 rounded-xl hover:bg-orange-50 transition cursor-pointer">
+              Opción 1
+            </div>
+            -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna 2: Chat -->
+      <div id="chatSection" class="md:col-span-5 hidden">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">🧙‍♂️ Habla con los personajes</h2>
+        <div class="bg-gray-100 p-4 rounded-xl shadow-inner">
+          <select id="characterSelect" class="w-full p-3 mb-4 border rounded-lg border-gray-300">
+            <option value="">Selecciona un personaje</option>
+          </select>
+          <textarea id="characterQuestion" rows="3" placeholder="¿Qué quieres preguntar?"
+            class="w-full p-3 mb-4 border border-gray-300 rounded-lg resize-none"></textarea>
+          <button id="askCharacter"
+            class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 font-semibold rounded-lg transition">
+            💬 Preguntar
+          </button>
+          <div id="characterReply" class="mt-4 italic text-gray-700 hidden"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
