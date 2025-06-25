@@ -32,14 +32,14 @@ Los Mirlos Storytelling is an interactive, **stateless** serverless application 
 - `templates/`: HTML templates for the frontend  
   - `index.html`: Main single-page UI layout  
 - `README.md`: Project documentation and usage instructions  
-- `app.py`: Main Python application entry point defining HTTP handlers and GCS interactions  
+- `main.py`: Main Python application entry point defining HTTP handlers and GCS interactions  
 
 
 ---
 
 ## Dependencies
 
-**Backend (Cloud Functions / `app.py`)**
+**Backend (Cloud Functions / `main.py`)**
 
 * `google-cloud-aiplatform` — to call the Gemini 1.5 Flash model  
 * `flask`  
@@ -77,7 +77,7 @@ Los Mirlos Storytelling is an interactive, **stateless** serverless application 
 
 ## File Descriptions
 
-### app.py
+### main.py
 This is the main application entry point. It defines HTTP handlers for each of the four endpoints of the serverless part, parses incoming requests, calls the Gemini API, orchestrates reads and writes to Google Cloud Storage, and returns JSON responses. It also handles error cases (missing parameters, storage failures, LLM errors) and sets appropriate HTTP status codes.
 
 ### index.html
@@ -138,7 +138,21 @@ curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/characters-chat \
 ```
 
 ---
+## Deployment in GCP
 
+- Command for built image 
+```bash
+gcloud builds submit --tag gcr.io/<PROJECT-ID>/flask-story-app
+```
+- Deploy en Cloud Run
+```bash
+gcloud run deploy flask-story-app \
+  --image gcr.io/<PROJECT-ID>/flask-story-app \
+  --region us-central1 \
+  --allow-unauthenticated
+
+```
+---
 ## Conclusions
 
 Los Mirlos Storytelling demonstrates how a serverless architecture on Google Cloud Platform enables the creation of scalable, cost-effective, and low-maintenance AI services. By leveraging Gemini 1.5 Flash and Cloud Functions, we achieve:
