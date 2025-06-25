@@ -139,7 +139,7 @@ curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/characters-chat \
 
 ---
 ## Deployment in GCP
-
+- Clone this repository in GCP Cloud Shell
 - Command for built image 
 ```bash
 gcloud builds submit --tag gcr.io/<PROJECT-ID>/flask-story-app
