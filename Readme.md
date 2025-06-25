@@ -16,7 +16,24 @@ Welcome to **Los Mirlos Storytelling**, a magical serverless app built with Goog
 
 ## Introduction
 
-Los Mirlos Storytelling is an interactive, **stateless** serverless application on Google Cloud Platform. Every request supplies the necessary prompt—whether to **create** a new story, **continue** an existing one, or **chat** with a character. The Cloud Function invokes the LLM and returns the generated text immediately. 
+Los Mirlos Storytelling is an interactive, **stateless** serverless application on Google Cloud Platform. Every request supplies the necessary prompt—whether to **create** a new story, **decide** how it will continue , or **chat** with a character. The Cloud Function invokes the LLM and returns the generated text immediately. 
+
+---
+
+## Structure
+- `functions/`: Directory containing all Cloud Function source code  
+  - `create_story/`: Source for the “create-story” endpoint  
+  - `continue_story/`: Source for the “continue-story” endpoint  
+  - `end_story/`: Source for the “end-story” endpoint  
+  - `characters_chat/`: Source for the “characters-chat” endpoint  
+- `static/`: Directory for static assets  
+  - `figs/`: Figures and supporting scripts   
+  - `script.js`: Client-side JavaScript for interactive behavior  
+- `templates/`: HTML templates for the frontend  
+  - `index.html`: Main single-page UI layout  
+- `README.md`: Project documentation and usage instructions  
+- `app.py`: Main Python application entry point defining HTTP handlers and GCS interactions  
+
 
 ---
 
@@ -25,13 +42,12 @@ Los Mirlos Storytelling is an interactive, **stateless** serverless application 
 **Backend (Cloud Functions / `app.py`)**
 
 * `google-cloud-aiplatform` — to call the Gemini 1.5 Flash model  
-* (Optional) `flask` for local testing  
+* `flask`  
 
 **Frontend**
 
 * Plain **HTML5** (`index.html`)  
-* **JavaScript** (`script.js`) using the Fetch API  
-* CSS files under `static/`  
+* **JavaScript** (`script.js`) using the Fetch API
 
 ---
 
@@ -40,7 +56,7 @@ Los Mirlos Storytelling is an interactive, **stateless** serverless application 
 * **Gemini 1.5 Flash** LLM for all story-generation and character-chat tasks  
 * **Google Cloud Functions (Gen2)** to host HTTP-triggered endpoints  
 
---
+---
 
 ## Functional Features
 
@@ -57,7 +73,8 @@ Los Mirlos Storytelling is an interactive, **stateless** serverless application 
 - **Extensibility Hooks**: Easily add features such as user authentication, analytics tracking, or automatic illustration generation.  
 - **Monitoring & Logging**: Integrate with Cloud Logging/Monitoring for tracing function invocations, performance metrics, and error alerts.  
 
---
+---
+
 ## File Descriptions
 
 ### app.py
@@ -69,7 +86,7 @@ Located in the `templates` folder, this is the single-page user interface. It in
 ### scripts/
 This directory under `static` contains all client-side JavaScript modules. The primary script registers event handlers on the form and buttons, sends `fetch` requests to `create-story`, `continue-story`, `end-story` and `characters-chat` endpoints, processes JSON responses, updates the HTML view (story text, continuation links, chat responses), and manages UI state (loading indicators, error messages, button disabling). It also centralizes API URL definitions and common utility functions for DOM manipulation and error handling.
 
---
+---
 
 ## Available Functions (Endpoints)
 
