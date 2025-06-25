@@ -1,4 +1,11 @@
-# 📚 Los Mirlos Storytelling — AI-Powered Interactive Storytelling Engine
+# Los Mirlos Storytelling — AI-Powered Interactive Storytelling Engine
+
+Members:
+-Luigi Cabrera
+-Fabián Concha
+-Alexander Gómez
+-Camila Luque
+-Sharon Valdivia
 
 Welcome to **Los Mirlos Storytelling**, a magical serverless backend built with 💡 Google Cloud Functions and powered by ✨ Gemini (Google's LLM) — designed to craft, extend, and chat with original AI-generated stories in real time.
 
