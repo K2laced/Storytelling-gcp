@@ -70,7 +70,6 @@ Los Mirlos Storytelling is an interactive, **stateless** serverless application 
 - **Error Handling**: Validate inputs, handle missing parameters or storage failures, and return meaningful HTTP status codes and error messages.  
 - **Unique Story IDs**: Generate and return a unique identifier for each story to support retrieval and updates.  
 - **Frontend Integration**: Provide a simple HTML/JS UI or third-party client via URL endpoints to interact with the service.  
-- **Extensibility Hooks**: Easily add features such as user authentication, analytics tracking, or automatic illustration generation.  
 - **Monitoring & Logging**: Integrate with Cloud Logging/Monitoring for tracing function invocations, performance metrics, and error alerts.  
 
 ---
