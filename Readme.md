@@ -137,6 +137,47 @@ curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/characters-chat \
 ```
 
 ---
+# Pipeline de Funcionamiento - Storytelling-GCP
+<img src="https://github.com/user-attachments/assets/c300f287-86e5-42e8-8aec-36c41a8e2315" width="400">
+
+
+1. **Frontend Estático**
+   - Alojado en un bucket de Cloud Storage configurado como sitio web.
+   - Tecnologías: HTML, CSS, JavaScript.
+   - Función: Captura el prompt del usuario y muestra la historia generada.
+
+2. **Petición al Backend**
+   - El frontend realiza una petición HTTP POST al endpoint correspondiente en Cloud Functions (por ejemplo, `/create-story`).
+
+3. **Cloud Functions (API Gateway Implícito)**
+   - Funciones disponibles:
+     - `create-story`: inicia una historia.
+     - `continue-story`: extiende una historia existente.
+     - `end-story`: finaliza y devuelve la historia completa.
+     - `gemini-call`: gestiona la llamada al modelo de lenguaje.
+
+4. **Llamada al Modelo de Lenguaje (Gemini)**
+   - `gemini-call` envía el prompt al modelo de lenguaje.
+   - Maneja autenticación y errores.
+   - Devuelve la respuesta generada a la función que la invocó.
+
+5. **Gestión de Estado**
+   - Firestore o Cloud Storage almacena:
+     - ID de sesión o usuario.
+     - Fragmentos generados.
+     - Timestamp de edición.
+   - Permite continuar historias sin perder contexto.
+
+6. **Orquestación de Flujo**
+   - `create-story`: crea un nuevo documento.
+   - `continue-story`: concatena fragmentos y actualiza.
+   - `end-story`: finaliza la historia y limpia recursos.
+
+7. **Respuesta al Frontend**
+   - Se devuelve el fragmento generado en cada etapa.
+   - El frontend actualiza la historia de forma dinámica.
+
+---
 ## Deployment in GCP
 - Clone this repository in GCP Cloud Shell
 - Command for built image 
