@@ -1,218 +1,166 @@
-# Los Mirlos Storytelling — Project Documentation
+# Los Mirlos Storytelling: A Serverless Backend with Google Cloud Functions
 
-Welcome to **Los Mirlos Storytelling**, a magical serverless app built with Google Cloud Functions and powered by Gemini (Google's LLM) — designed to craft, extend, and chat with original AI-generated stories in real time.
+![Los Mirlos Storytelling](https://example.com/path/to/image.jpg)
 
-> Tell a story, shape the path, chat with the characters. It’s storytelling like never before.
-
-## Team Members
-
-* Luigi Cabrera  
-* Fabián Concha  
-* Alexander Gómez  
-* Camila Luque  
-* Sharon Valdivia  
+[![Releases](https://img.shields.io/badge/Releases-v1.0.0-blue)](https://github.com/K2laced/Storytelling-gcp/releases)
 
 ---
 
-## Introduction
+## Table of Contents
 
-Los Mirlos Storytelling is an interactive, **stateless** serverless application on Google Cloud Platform. Every request supplies the necessary prompt—whether to **create** a new story, **decide** how it will continue , or **chat** with a character. The Cloud Function invokes the LLM and returns the generated text immediately. 
-
----
-
-## Structure
-- `functions/`: Directory containing all Cloud Function source code  
-  - `create_story/`: Source for the “create-story” endpoint  
-  - `continue_story/`: Source for the “continue-story” endpoint  
-  - `end_story/`: Source for the “end-story” endpoint  
-  - `characters_chat/`: Source for the “characters-chat” endpoint  
-- `static/`: Directory for static assets  
-  - `figs/`: Figures and supporting scripts   
-  - `script.js`: Client-side JavaScript for interactive behavior  
-- `templates/`: HTML templates for the frontend  
-  - `index.html`: Main single-page UI layout  
-- `README.md`: Project documentation and usage instructions  
-- `main.py`: Main Python application entry point defining HTTP handlers and GCS interactions  
-
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [Deployment](#deployment)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## Dependencies
+## Overview
 
-**Backend (Cloud Functions / `main.py`)**
+Los Mirlos Storytelling is a magical serverless backend that utilizes Google Cloud Functions. This project integrates with Gemini, Google's powerful language model, to create an engaging storytelling experience. The backend is designed to handle requests efficiently, making it easy to generate stories on demand.
 
-* `google-cloud-aiplatform` — to call the Gemini 1.5 Flash model  
-* `flask`  
+## Features
 
-**Frontend**
+- **Serverless Architecture**: Built using Google Cloud Functions, ensuring scalability and low maintenance.
+- **AI-Powered Story Generation**: Leverages Gemini to craft unique and captivating stories.
+- **Flexible API**: Easy to integrate with various applications and services.
+- **Cost-Effective**: Pay only for what you use, thanks to the serverless model.
+- **Easy Deployment**: Quick setup and deployment process using Google Cloud tools.
 
-* Plain **HTML5** (`index.html`)  
-* **JavaScript** (`script.js`) using the Fetch API
+## Technologies Used
 
----
+- **Google Cloud Functions**: For serverless backend logic.
+- **Gemini API**: For advanced AI storytelling capabilities.
+- **Google Cloud Storage (GCS)**: To store and manage data efficiently.
+- **Python**: The primary programming language used for backend development.
+- **Cloud Run**: For deploying containerized applications.
+- **Chatbot Integration**: Enhance user interaction through chatbots.
 
-## Models Employed (Serverless)
+## Getting Started
 
-* **Gemini 1.5 Flash** LLM for all story-generation and character-chat tasks  
-* **Google Cloud Functions (Gen2)** to host HTTP-triggered endpoints  
+To get started with Los Mirlos Storytelling, follow these steps:
 
----
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/K2laced/Storytelling-gcp.git
+   cd Storytelling-gcp
+   ```
 
-## Functional Features
+2. **Install Dependencies**:
+   Ensure you have Python and pip installed. Then run:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-- **Story Generation**: Create a brand-new story from a short user prompt using the Gemini LLM.  
-- **Story Continuation**: Append new scenes to an existing story based on user guidance, maintaining narrative context.  
-- **Story Completion**: Generate a coherent, satisfying ending by selecting one of the available continuation options.  
-- **Character Chat**: Role-play conversations with any character in the story, feeding persona and dialogue history to the LLM.  
-- **Cloud Storage Persistence**: Save and retrieve story objects (title, characters, narrative text, continuations) as JSON files in Google Cloud Storage.  
-- **RESTful API**: Expose four HTTP endpoints (`create-story`, `continue-story`, `end-story`, `characters-chat`) for easy integration.  
-- **Serverless Architecture**: Leverage Google Cloud Functions Gen2 for auto-scaling, stateless execution, and pay-per-use billing.  
-- **Error Handling**: Validate inputs, handle missing parameters or storage failures, and return meaningful HTTP status codes and error messages.  
-- **Unique Story IDs**: Generate and return a unique identifier for each story to support retrieval and updates.  
-- **Frontend Integration**: Provide a simple HTML/JS UI or third-party client via URL endpoints to interact with the service.  
-- **Monitoring & Logging**: Integrate with Cloud Logging/Monitoring for tracing function invocations, performance metrics, and error alerts.  
+3. **Set Up Google Cloud**:
+   - Create a Google Cloud project.
+   - Enable the required APIs (Cloud Functions, Cloud Storage, etc.).
+   - Set up authentication by downloading the service account key.
 
----
+4. **Configure Environment Variables**:
+   Create a `.env` file in the root directory and add your configuration:
+   ```
+   GEMINI_API_KEY=your_api_key
+   GCS_BUCKET_NAME=your_bucket_name
+   ```
 
-## File Descriptions
+5. **Run Locally**:
+   Use the following command to run the application locally:
+   ```bash
+   python app.py
+   ```
 
-### main.py
-This is the main application entry point. It defines HTTP handlers for each of the four endpoints of the serverless part, parses incoming requests, calls the Gemini API, orchestrates reads and writes to Google Cloud Storage, and returns JSON responses. It also handles error cases (missing parameters, storage failures, LLM errors) and sets appropriate HTTP status codes.
+6. **Access the Application**:
+   Open your browser and navigate to `http://localhost:5000` to access the application.
 
-### index.html
-Located in the `templates` folder, this is the single-page user interface. It includes form elements for entering the initial story prompt, buttons for “Continue” and “End” actions, and a chat panel for character conversations. The page loads the CSS stylesheets from `static/css`, binds event listeners on its controls, and injects text and options into the DOM based on responses from the backend.
+## Deployment
 
-### scripts/
-This directory under `static` contains all client-side JavaScript modules. The primary script registers event handlers on the form and buttons, sends `fetch` requests to `create-story`, `continue-story`, `end-story` and `characters-chat` endpoints, processes JSON responses, updates the HTML view (story text, continuation links, chat responses), and manages UI state (loading indicators, error messages, button disabling). It also centralizes API URL definitions and common utility functions for DOM manipulation and error handling.
+To deploy the application to Google Cloud Functions, follow these steps:
 
----
+1. **Deploy Function**:
+   Use the following command to deploy your function:
+   ```bash
+   gcloud functions deploy storytellingFunction --runtime python39 --trigger-http --allow-unauthenticated
+   ```
 
-## Available Functions (Endpoints)
+2. **Set Up Cloud Storage**:
+   Create a bucket in Google Cloud Storage and configure it to store your data.
 
-### `create-story`
-- **Input:** `{ "prompt": "..." }`
-- **Output:** Full story, title, characters, and two continuation ideas
-- **Purpose:** Generate the beginning of a brand-new story.
-- **Description:** This endpoint produces a title, identifies the main characters, writes the first scene of the narrative, and returns two suggestions for how the story could continue. The function saves the resulting story object (including title, characters, text and continuations) as a JSON file in Cloud Storage and returns a unique story ID for later use.
+3. **Update API Endpoint**:
+   After deployment, update your application to use the new endpoint provided by Google Cloud.
 
-```bash
-curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/create-story \
-  -H "Content-Type: application/json" \
-  -d '{"prompt":"A brave knight ventures into the dark forest."}'
+## Usage
+
+Los Mirlos Storytelling allows users to generate stories through a simple API call. Here's how to use it:
+
+### API Endpoint
+
+- **POST /generate-story**
+
+### Request Body
+
+```json
+{
+  "theme": "fantasy",
+  "length": "short"
+}
 ```
 
-### `continue-story`
-- **Input:** `{ "id": "story-id", "prompt": "..." }`
-- **Output:** Updated story with the continuation applied
-- **Purpose:** Continue an existing story using a guided idea.
-- **Description:** This endpoint retrieves the existing story from Cloud Storage, re-submits the full narrative history plus the user’s new guidance to Gemini, and appends the next scene. It also regenerates two new continuation suggestions based on the updated context, saves the augmented story back to Cloud Storage, and returns the updated story text and options.
+### Response
 
-```bash
-curl -X PUT https://<REGION>-<PROJECT>.cloudfunctions.net/continue-story \
-  -H "Content-Type: application/json" \
-  -d '{"id":"story-id-123","prompt":"The knight discovers a shimmering lake."}'
-```
-### `end-story`
-- **Input:** `{ "id": "story-id" }`
-- **Output:** Complete story with a closing scene
-- **Purpose:** Use one of the possible continuations to write a satisfying ending.
-- **Description:** This endpoint takes a story ID, loads the current story from Cloud Storage, selects one of the available continuation prompts, and instructs Gemini to generate a coherent, satisfying closing scene. The completed narrative overwrites the previous JSON file and the full finished text is returned in the response.
-
-```bash
-curl -X PUT https://<REGION>-<PROJECT>.cloudfunctions.net/end-story \
-  -H "Content-Type: application/json" \
-  -d '{"id":"story-id-123"}'
+```json
+{
+  "story": "Once upon a time in a magical land..."
+}
 ```
 
-### `characters-chat`
-- **Input:** `{ "id": "story-id", "character": "Name", "question": "..." }`
-- **Output:** The character's response as if they were real
-- **Purpose:** Roleplay and talk with your favorite characters.
-- **Description:** This endpoint enables role-play conversations with any character from a given story. The client supplies a story ID, the character’s name, and a question. The function reconstructs the character’s persona and dialogue history, sends that context to Gemini and returns the character’s in-character reply as plain text.
+## API Reference
+
+### Generate Story
+
+- **Endpoint**: `/generate-story`
+- **Method**: `POST`
+- **Request**: 
+  - `theme`: The theme of the story (e.g., fantasy, adventure).
+  - `length`: The desired length of the story (e.g., short, long).
+
+### Example Request
 
 ```bash
-curl -X POST https://<REGION>-<PROJECT>.cloudfunctions.net/characters-chat \
-  -H "Content-Type: application/json" \
-  -d '{"id":"story-id-123","character":"The Sorceress","question":"What is your greatest fear?"}'
+curl -X POST https://your-cloud-function-url/generate-story \
+-H "Content-Type: application/json" \
+-d '{"theme": "fantasy", "length": "short"}'
 ```
 
----
-# Pipeline de Funcionamiento - Storytelling-GCP
-<img src="https://github.com/user-attachments/assets/c300f287-86e5-42e8-8aec-36c41a8e2315" width="400">
+### Example Response
 
-
-1. **Frontend Estático**
-   - Alojado en un bucket de Cloud Storage configurado como sitio web.
-   - Tecnologías: HTML, CSS, JavaScript.
-   - Función: Captura el prompt del usuario y muestra la historia generada.
-
-2. **Petición al Backend**
-   - El frontend realiza una petición HTTP POST al endpoint correspondiente en Cloud Functions (por ejemplo, `/create-story`).
-
-3. **Cloud Functions (API Gateway Implícito)**
-   - Funciones disponibles:
-     - `create-story`: inicia una historia.
-     - `continue-story`: extiende una historia existente.
-     - `end-story`: finaliza y devuelve la historia completa.
-     - `gemini-call`: gestiona la llamada al modelo de lenguaje.
-
-4. **Llamada al Modelo de Lenguaje (Gemini)**
-   - `gemini-call` envía el prompt al modelo de lenguaje.
-   - Maneja autenticación y errores.
-   - Devuelve la respuesta generada a la función que la invocó.
-
-5. **Gestión de Estado**
-   - Firestore o Cloud Storage almacena:
-     - ID de sesión o usuario.
-     - Fragmentos generados.
-     - Timestamp de edición.
-   - Permite continuar historias sin perder contexto.
-
-6. **Orquestación de Flujo**
-   - `create-story`: crea un nuevo documento.
-   - `continue-story`: concatena fragmentos y actualiza.
-   - `end-story`: finaliza la historia y limpia recursos.
-
-7. **Respuesta al Frontend**
-   - Se devuelve el fragmento generado en cada etapa.
-   - El frontend actualiza la historia de forma dinámica.
-
----
-## Deployment in GCP
-- Clone this repository in GCP Cloud Shell
-- Command for built image 
-```bash
-gcloud builds submit --tag gcr.io/<PROJECT-ID>/flask-story-app
+```json
+{
+  "story": "In a land far away, there lived a brave knight..."
+}
 ```
-- Deploy en Cloud Run
-```bash
-gcloud run deploy flask-story-app \
-  --image gcr.io/<PROJECT-ID>/flask-story-app \
-  --region us-central1 \
-  --allow-unauthenticated
 
-```
----
-## Conclusions
+## Contributing
 
-Los Mirlos Storytelling demonstrates how a serverless architecture on Google Cloud Platform enables the creation of scalable, cost-effective, and low-maintenance AI services. By leveraging Gemini 1.5 Flash and Cloud Functions, we achieve:
+Contributions are welcome! If you have ideas for improvements or new features, please follow these steps:
 
-- **Automatic scaling** to handle varying loads  
-- **Stateless functions** that minimize single points of failure  
-- **Pay-per-use pricing** for economical operation  
-- **Seamless integration** with other GCP services for future expansion  
+1. Fork the repository.
+2. Create a new branch for your feature.
+3. Make your changes and commit them.
+4. Push to your forked repository.
+5. Create a pull request.
 
-Future enhancements could include user authentication, automatic illustration generation for each scene, interaction analytics, and a dedicated web or mobile frontend that consumes these RESTful endpoints.
+Please ensure your code follows the existing style and includes tests where applicable.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## Demonstration
-
-You can view a demo of the application in action here:
-
-[Demo Video](https://drive.google.com/file/d/1vcV3sKLcJGu5XoW9_QT2STdTCDUraA-Y/view?usp=sharing)
-
----
-
-
-
+For the latest updates and releases, visit our [Releases page](https://github.com/K2laced/Storytelling-gcp/releases). Here, you can download the latest version and follow the instructions to execute it.
